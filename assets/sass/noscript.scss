@@ -1,11 +1,11 @@
-@import 'libs/vars';
+@import 'libs/tokens';
 @import 'libs/functions';
 @import 'libs/mixins';
 @import 'libs/vendor';
 @import 'libs/breakpoints';
 @import 'libs/html-grid';
 @import 'libs/fixed-grid';
-@import 'font-awesome.min.css';
+@import 'fontawesome-all.min.css';
 
 /*
 	Massively by HTML5 UP
@@ -33,14 +33,36 @@
 /* Intro */
 
 	#intro {
-		body.is-preload & {
-			opacity: 1;
+		.sequence-hero__canvas {
+			display: none;
+		}
 
-			&:not(.hidden) {
-				& + #header + #nav {
-					@include vendor('transform', 'none');
-					opacity: 1;
-				}
-			}
+		.sequence-hero__poster {
+			display: block;
+		}
+
+		body.is-preload & {
+			@include vendor('transform', 'none');
+			opacity: 1;
+		}
+	}
+
+/* Podium Sequencer — no-JS fallback */
+
+	.podium-sequencer {
+		.podium-sequencer__pin {
+			height: auto;
+		}
+
+		.podium-sequencer__scene {
+			position: relative;
+		}
+
+		.podium-sequencer__bg {
+			transform: translate(-50%, -50%) scale(1) !important;
+		}
+
+		.podium-sequencer__iphone {
+			display: none;
 		}
 	}

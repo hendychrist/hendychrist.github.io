@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.log
+/assets/parallax/
+/assets/parallax-1080-30fps-frame/hvec*.jpg
+/images/bazzel-iphone.png
+/reference/

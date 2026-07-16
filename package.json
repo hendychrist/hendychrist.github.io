@@ -1,0 +1,19 @@
+{
+  "name": "hendychrist-portfolio",
+  "private": true,
+  "packageManager": "pnpm@10.13.1",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail \"pnpm run watch:css\" \"pnpm run serve\"",
+    "build": "pnpm run build:css",
+    "build:parallax": "node scripts/build-parallax-frames.mjs",
+    "build:css": "sass --style=expanded --no-source-map --silence-deprecation=import,global-builtin,slash-div assets/sass/main.scss:assets/css/main.css assets/sass/noscript.scss:assets/css/noscript.css",
+    "check:links": "node scripts/check-links.mjs",
+    "watch:css": "sass --watch --style=expanded --no-source-map --silence-deprecation=import,global-builtin,slash-div assets/sass/main.scss:assets/css/main.css assets/sass/noscript.scss:assets/css/noscript.css",
+    "serve": "http-server . -a 127.0.0.1 -p 4173 -c-1"
+  },
+  "devDependencies": {
+    "concurrently": "9.2.1",
+    "http-server": "14.1.1",
+    "sass": "1.101.0"
+  }
+}

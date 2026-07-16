@@ -6,240 +6,227 @@
 -->
 <html>
 	<head>
-		<title> Hendy's Portfolio</title>
+		<title>Hendy Christian | Portfolio</title>
+		<!-- Hendy's Portfolio -->
 		
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="preload" as="image" href="assets/parallax-1080-30fps-frame/webp/frame000.webp" type="image/webp" fetchpriority="high" />
 		<link rel="shortcut icon" type="image/x-icon" href="images/photoProfile.png" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
-	<body class="is-preload">
+	<body class="is-preload home-page">
 
 		<!-- Wrapper -->
 			<div id="wrapper" class="fade-in">
 
-				<!-- Intro -->
-					<div id="intro">
-						<h1> My <br />
-							Portfolio </h1>
-						<p> A Showcase of my Porject and my abilities <a href="https://html5up.net/license">Creative Commons license</a>.</p>
-						<ul class="actions">
-							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
-						</ul>
-					</div>
+					<!-- Intro -->
+						<div id="intro" class="sequence-hero">
+							<div class="sequence-hero__stage">
+								<img class="sequence-hero__poster" src="assets/parallax-1080-30fps-frame/webp/frame000.webp" alt="" aria-hidden="true" fetchpriority="high" />
+								<canvas class="sequence-hero__canvas" aria-hidden="true"></canvas>
+								<div class="sequence-hero__overlay" aria-hidden="true"></div>
+								<div class="sequence-hero__exit" aria-hidden="true"></div>
+								<div class="sequence-hero__content">
+									<section class="sequence-hero__panel sequence-hero__panel--intro" data-hero-panel="intro" aria-labelledby="hero-title">
+										<div class="sequence-hero__panel-inner">
+											<p class="sequence-hero__eyebrow">Mobile Application Developer</p>
+											<h1 id="hero-title">
+												<span>Hendy</span>
+												<span>Christian</span>
+											</h1>
+											<p class="sequence-hero__lede">I build thoughtful mobile experiences with Flutter, Dart, Swift, and connected services.</p>
+											<ul class="sequence-hero__tech-list" aria-label="Core technologies">
+												<li>Flutter</li>
+												<li>Dart</li>
+												<li>Swift</li>
+												<li>Firebase</li>
+												<li>REST API</li>
+											</ul>
+											<a href="#projects" class="sequence-hero__cta scrolly">
+												<span>View selected work</span>
+												<span aria-hidden="true">&darr;</span>
+											</a>
+										</div>
 
-				<!-- Header -->
-					<header id="header">
-						<a href="index.html" class="logo"> Portfolio </a>
-					</header>
+										<div class="sequence-hero__scroll-cue" aria-hidden="true">
+											<span>Scroll to explore</span>
+											<i></i>
+										</div>
+									</section>
 
-				<!-- Nav -->
-					<nav id="nav">
-						<ul class="links">
-							<li class="active"><a href="index.html">Developer</a></li>
-							<!-- <li><a href="generic.html">Generic Page</a></li>
-							<li><a href="elements.html">Elements Reference</a></li> -->
-						</ul>
-						<ul class="icons">
-							<li><a href="https://instagram.com/hendychristt" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-							<li><a href="https://linkedin.com/in/hendy-christian002" class="icon brands fa-linkedin"><span class="label">Likedin</span></a></li>
-							<li><a href="https://github.com/hendychrist" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-						</ul>
-					</nav>
+									<section class="sequence-hero__panel sequence-hero__panel--capabilities" data-hero-panel="capabilities" aria-labelledby="capabilities-title">
+										<div class="sequence-hero__panel-inner">
+											<p class="sequence-hero__eyebrow">Capabilities</p>
+											<h2 id="capabilities-title">From interface systems to connected mobile flows.</h2>
+											<ul class="sequence-hero__capability-list">
+												<li>
+													<span>01</span>
+													<div>
+														<strong>Cross-platform development</strong>
+														<small>Flutter &amp; Dart</small>
+													</div>
+												</li>
+												<li>
+													<span>02</span>
+													<div>
+														<strong>Native iOS development</strong>
+														<small>Swift &amp; UIKit</small>
+													</div>
+												</li>
+												<li>
+													<span>03</span>
+													<div>
+														<strong>Data and connected services</strong>
+														<small>REST APIs &amp; Firebase</small>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</section>
 
-				<!-- Main -->
-					<div id="main">
+									<section class="sequence-hero__panel sequence-hero__panel--disciplines" data-hero-panel="disciplines" aria-labelledby="disciplines-title">
+										<div class="sequence-hero__panel-inner">
+											<p class="sequence-hero__eyebrow">Working disciplines</p>
+											<h2 id="disciplines-title">Clear interactions.<br />Dependable integrations.</h2>
+											<p class="sequence-hero__summary">Products designed for everyday use, from the first interface decision to the data behind it.</p>
+											<ul class="sequence-hero__discipline-list" aria-label="Product disciplines">
+												<li>Product UI</li>
+												<li>API Integration</li>
+												<li>Authentication</li>
+												<li>Realtime Data</li>
+											</ul>
+											<p class="sequence-hero__closing">Selected work follows</p>
+										</div>
+									</section>
+								</div>
+							</div>
+						</div>
 
-						<!-- Featured Post -->
-							<article class="post featured">
-								<header class="major">
-									<span class="date">System Information </span>
-									<h2><a href="#"> Hello! This is <br/>
-									Hendy Christian</a> <br/>Portfolio </h2>
+					<!-- Project Showcase -->
+						<section id="projects" class="project-showcase" aria-labelledby="projects-title">
+							<div class="project-showcase__transition" aria-hidden="true"></div>
+
+							<div class="project-showcase__lead">
+								<header class="project-showcase__header">
+									<a class="project-showcase__brand" href="#intro" aria-label="Back to the sequence hero">
+										<span>HENDY</span>
+										<span>/ WORKS</span>
+									</a>
+									<a class="project-showcase__jump" href="#projects-grid">PROJECTS</a>
 								</header>
-							</article>
 
-						<!-- Posts -->
-							<section class="posts">
-<!-- 
-								<article>
-                                    <header>
-                                        <span class="date"> Flutter - Dart Programming Language </span>
-										<h2> Klaskoo Apps </h2>
-                                    </header>
-                                    <a href="#" class="image fit"><img src="images/coverDepanKlaskoo.png" alt="" /></a>
-                                    <p>Klaskoo adalah sebuah aplikasi untuk mengelola sekolah atau tempat belajar secara digital. Klaskoo juga mengajak orang tua untuk masuk ke dalam kelas dan terlibat dalam setiap perkembangan anak mereka. </p>
-                                    <ul class="actions special">
-                                        <li><a href="klaskoo.html" class="button">See More</a></li>
-                                    </ul>
-                                </article>
-								<article>
-                                    <header>
-                                        <span class="date"> Flutter - Dart Programming Language </span>
-                                        <h2> Kodekiddo Apps </h2>
-                                    </header>
-                                    <a href="#" class="image fit"><img src="images/finalKodekiddoImage.png" alt="" /></a>
-                                    <p>KodeKiddo adalah tempat belajar coding yang interaktif dan seru untuk anak-anak. Dengan aplikasi ini mereka dapat dengan mudah untuk melakukan pengecekan class summary, achievment dan point yang telah mereka dapat, melalui aplikasi mobile ini.</p>
-                                    <ul class="actions special">
-                                        <li><a href="kkmobile.html" class="button">See More</a></li>
-                                    </ul>
-                                </article>
-								 -->
-								<article>
-									<header>
-										<span class="date"> iOS Swift Language </span>
-										<h2> BMI Calculator Apps</h2>
+								<div class="project-showcase__content project-showcase__content--lead">
+									<header class="project-showcase__intro">
+										<p>Selected work / Production mobile products</p>
+										<h2 id="projects-title">Production Flutter products built for customer self-service, workforce operations, and connected learning.</h2>
 									</header>
-									<a href="#" class="image fit"><img src="images/pic02.jpg" alt="" /></a>
-									<p>Body Mass Index (BMI) atau Indeks Massa Tubuh (IMT) adalah angka yang menjadi penilaian standar untuk menentukan apakah berat badan Anda tergolong normal, kurang, berlebih, atau obesitas. Aplikasi tersebut terdiri dari Weight and Height untuk mengkalkulasi hasil dari BMI tersebut. </p>
-									<ul class="actions special">
-										<li><a href="bmi.html" class="button">See More</a></li>
-									</ul>
-								</article>
 
-								<article>
-									<header>
-										<span class="date"> iOS Swift Language </span>
-										<h2> Flash - Chat </h2>
-								
-									</header>
-									<a href="#" class="image fit"><img src="images/pic03.jpg" alt="" /></a>
-									<p>Flash - Chat - iOS 13 disini adalah aplikasi mengirim pesan (Chat) antara 2 akun yang berbeda. Oleh karena itu pasti harus memiliki fitur login dan register untuk membaut akun itu sendiri. Dan memerlukan database untuk menampung akun tersebut. Database yang saya gunakan yaitu Firebase database. </p>
-									<ul class="actions special">
-										<li><a href="flashchat.html" class="button">See More </a></li>
-									</ul>
-								</article>
+									<div id="projects-grid" class="project-showcase__flagship">
+										<article class="project-card project-card--flagship" data-project-card aria-labelledby="project-dicbn-title">
+											<header class="project-card__copy">
+												<p class="project-card__label">Project 01 / Mobile Application</p>
+												<h3 id="project-dicbn-title">diCBN</h3>
+												<p>Built for CBN customers, diCBN brings bill payments, Bank INA services, promotions, service upgrades, and guided connection diagnostics into one mobile experience.</p>
+											</header>
 
-								<article>
-									<header>
-										<span class="date"> Java </span>
-										<h2><a href="#"> Coffee Shop <br />
-										Cashier Program </a></h2>
-									</header>
-									<a href="#" class="image fit"><img src="images/pic11.jpg" alt="" /></a>
-									<p>Disini saya menggunakan bahasa pemograman Java dan database XAMPP MySQL (PhpMyAdmin) untuk membuat sebuah aplikasi toko bar yang baru saya dibuka. Dibawah ini Tampilannya.</p>
-									<ul class="actions special">
-										<li><a href="kopicop.html" class="button"> See More </a></li>
-									</ul>
-								</article>
-
-								<article>
-									<header>
-										<span class="date"> Web Hosting - Wordpress</span>
-										<h2><a href="#"> Jalanyuk </h2>
-									</header>
-									<a href="#" class="image fit"><img src="images/pic13.jpg" alt="" /></a>
-									<p> Saya membuat menu navbar mencari tempat hosting , menginstall plugin - plugin yang dibutuhkan , Membuat  menu - menu pada web tersebut. Website ini ditujukan untuk para traveler yang menyediakan tiket pesawat, Rental mobil. Pada website inipun para pengguna jasa kami dapat memberikan pengalaman / Review bagaimana hotel atau tour yang kami sediakan. Sehingga dapat membuat pengunjung lain mempercayai menggunakan jasa jalanyuk tersebut. </p>
-									<ul class="actions special">
-										<li><a href="jalanyuk.html" class="button"> See More </a></li>
-									</ul>
-								</article>
-								
-								<!--  Database  -->
-								<article>
-									<header>
-										<span class="date"> SQL  </span>
-										<h2><a href="#"> Microsoft SQL Server <br />
-										Management Studio </a></h2>
-									</header>
-									<a href="#" class="image fit"><img src="images/pic18.jpg" alt="" /></a>
-									<p>Disini saya menggunakan bahasa pemograman Java dan database XAMPP MySQL (PhpMyAdmin) untuk membuat sebuah aplikasi toko bar yang baru saya dibuka. Dibawah ini Tampilannya.</p>
-									<ul class="actions special">
-										<li><a href="denver.html" class="button"> See More </a></li>
-									</ul>
-								</article>
-
-								<!--  Database  -->
-								<article>
-									<header>
-										<span class="date"> Android Studio - Java </span>
-										<h2><a href="#"> Dota Marketplace </h2>
-									</header>
-									<a href="#" class="image fit"><img src="images/picDota.jpg" alt="" /></a>
-									<p>Disini saya menggunakan bahasa pemograman Java pada andorid studio dan database SQLite. Tersedia fitur login dan register yang terintegrasi dengan database dengan berbagai macam validasi, etc.</p>
-									<ul class="actions special">
-										<li><a href="detaildota.html" class="button"> See More </a></li>
-									</ul>
-								</article>
-
-							</section>
-
-						<!-- Footer -->
-						<!--	
-							<footer>
-								<div class="pagination">
-									<a href="#" class="previous">Prev</a>
-									<a href="#" class="page active">1</a>
-									<a href="#" class="page">2</a>
-									<a href="#" class="page">3</a>
-									<span class="extra">&hellip;</span>
-									<a href="#" class="page">8</a>
-									<a href="#" class="page">9</a>
-									<a href="#" class="page">10</a>
-									<a href="#" class="next">Next</a>
-								</div>
-							</footer> 
-						-->
-
-					</div>
-
-				<!-- Footer -->
-					<footer id="footer">
-						<section>
-							<form method="post" action="#">
-								<div class="fields">
-									<div class="field">
-										<label for="name">Name</label>
-										<input type="text" name="name" id="name" />
-									</div>
-									<div class="field">
-										<label for="email">Email</label>
-										<input type="text" name="email" id="email" />
-									</div>
-									<div class="field">
-										<label for="message">Message</label>
-										<textarea name="message" id="message" rows="3"></textarea>
+											<div class="project-card__media project-card__media--montage project-card__media--dicbn">
+												<figure class="project-screen project-screen--left" data-screenshot-slot="dicbn-home">
+													<img src="images/dicbn/home-bank-ina.png" alt="diCBN home showing a linked Bank INA savings account, billing, loyalty, add-ons, promotions, and current offers." width="364" height="848" loading="lazy" decoding="async" />
+													<figcaption>Home &amp; Bank INA</figcaption>
+												</figure>
+												<figure class="project-screen project-screen--center" data-screenshot-slot="dicbn-bank-detail">
+													<img src="images/dicbn/bank-account-detail.png" alt="Bank INA account detail in diCBN showing balance, top-up, transfer, and transaction history." width="365" height="841" loading="lazy" decoding="async" />
+													<figcaption>Bank Account Detail</figcaption>
+												</figure>
+												<figure class="project-screen project-screen--right" data-screenshot-slot="dicbn-internet-online">
+													<img src="images/dicbn/internet-online.png" alt="diCBN home showing an online internet connection status message." width="402" height="874" loading="lazy" decoding="async" />
+													<figcaption>Internet Online</figcaption>
+												</figure>
+											</div>
+										</article>
 									</div>
 								</div>
-								<ul class="actions">
-									<li><input type="submit" value="Send Message" /></li>
-								</ul>
-							</form>
-						</section>
-						<section class="split contact">
-							<section class="alt">
-								<h3> Instagram </h3>
-								<p> hendychristt </p>
-							</section>
-							<section>
-								<h3>Phone</h3>
-								<p><a href="#">(+62) 822-8188-4600</a></p>
-							</section>
-							<section>
-								<h3>Email</h3>
-								<p><a href="#">hendy.christian002@gmail.com</a></p>
-							</section>
-							<section>
-								<h3>Social</h3>
-								<ul class="icons alt">
+							</div>
 
-									<li><a href="https://line.me/R/ti/p/@sniperexpert" class="icon brands alt fa-line"><span class="label"> Line </span></a></li>
-
-									<li><a href="www.linkedin.com/in/hendy-christian-49a704171" class="icon brands alt fa-linkedin"><span class="label">linkedin</span></a></li>
-						
-									<li><a href="https://github.com/hendychrist" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								</ul>
-							</section>
-						</section>
-					</footer>
-
-				<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; Hendy Christian </li> </ul>
+							<!-- Podium Sequencer — scroll-driven zoom to iPhone mockup -->
+				<section id="podium-sequencer" class="podium-sequencer" aria-label="Showcase sequence">
+					<div class="podium-sequencer__scene">
+						<img class="podium-sequencer__bg" src="images/showcase-podium-large.jpg" alt="" aria-hidden="true" />
+						<div class="podium-sequencer__iphone">
+							<div class="podium-sequencer__notch"></div>
+							<video class="podium-sequencer__video" muted playsinline preload="auto" src="assets/video/dicbn-mobile-app.mp4"></video>
+						</div>
 					</div>
+				</section>
 
-			</div>
+							<div class="project-showcase__content project-showcase__content--supporting">
+								<div class="project-showcase__supporting-grid">
+									<article class="project-card project-card--workforce" data-project-card aria-labelledby="project-cbnians-title">
+										<header class="project-card__copy">
+											<p class="project-card__label">Project 02 / Internal Application</p>
+											<h3 id="project-cbnians-title">CBNians</h3>
+											<p>Designed for internal teams, CBNians simplifies employee attendance, self-service tools, approvals, and field installation reporting.</p>
+										</header>
+
+										<div class="project-card__media project-card__media--montage project-card__media--cbnians">
+											<figure class="project-screen project-screen--left" data-screenshot-slot="cbnians-home">
+												<img src="images/cbnians/home-attendance.jpeg" alt="CBNians home showing today's work schedule, attendance, employee services, and quick menus." width="738" height="1600" loading="lazy" decoding="async" />
+												<figcaption>Home &amp; Attendance</figcaption>
+											</figure>
+											<figure class="project-screen project-screen--center" data-screenshot-slot="cbnians-menu">
+												<img src="images/cbnians/employee-menu.jpeg" alt="CBNians employee menu showing general services, approvals, paperless documents, activity logs, and sales forms." width="738" height="1600" loading="lazy" decoding="async" />
+												<figcaption>Employee Menu</figcaption>
+											</figure>
+											<figure class="project-screen project-screen--right" data-screenshot-slot="cbnians-task-list">
+												<img src="images/cbnians/installation-task-list.jpeg" alt="CBNians task list showing scheduled broadband installation work and task reporting statuses." width="738" height="1600" loading="lazy" decoding="async" />
+												<figcaption>Installation Task List</figcaption>
+											</figure>
+										</div>
+									</article>
+
+									<article class="project-card project-card--klaskoo" data-project-card aria-labelledby="project-klaskoo-title">
+										<header class="project-card__copy">
+											<p class="project-card__label">Project 03 / Parent Application</p>
+											<h3 id="project-klaskoo-title">Klaskoo</h3>
+											<p>Made for parents, Klaskoo keeps student grades, class schedules, and school updates easy to follow in one place.</p>
+										</header>
+										<figure class="project-card__media project-card__media--widescreen project-card__media--contain">
+											<img src="images/coverDepanKlaskoo.png" alt="Three Klaskoo screens showing login, onboarding, and school-owner registration." width="1920" height="1080" loading="lazy" decoding="async" />
+										</figure>
+									</article>
+
+									<article class="project-card project-card--kodekiddo" data-project-card aria-labelledby="project-kodekiddo-title">
+										<header class="project-card__copy">
+											<p class="project-card__label">Project 04 / Student Application</p>
+											<h3 id="project-kodekiddo-title">KodeKiddo</h3>
+											<p>Created for young learners, KodeKiddo brings lesson schedules, class updates, achievements, and points into a simple learning companion.</p>
+										</header>
+										<figure class="project-card__media project-card__media--landscape project-card__media--contain">
+											<img src="images/finalKodekiddoImage.png" alt="Three KodeKiddo screens showing announcements, class summaries, and student achievements." width="1920" height="959" loading="lazy" decoding="async" />
+										</figure>
+									</article>
+								</div>
+							</div>
+
+							<div id="copyright">
+								<ul><li>&copy; Hendy Christian</li></ul>
+							</div>
+
+							<template id="project-card-template">
+								<article class="project-card">
+									<header class="project-card__copy">
+										<p class="project-card__label">Project XX / Product Category</p>
+										<h3>Project Name</h3>
+										<p>One concise sentence describing the production product and its most valuable user flows.</p>
+									</header>
+									<div class="project-card__media" aria-hidden="true"></div>
+								</article>
+							</template>
+						</section>
+
+				</div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
@@ -248,7 +235,9 @@
 			<script src="assets/js/browser.min.js"></script>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+			<script type="module" src="assets/js/app.js"></script>
 
 	</body>
 </html>

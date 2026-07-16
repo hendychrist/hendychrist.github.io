@@ -1,0 +1,40 @@
+// CTA Section
+
+.cta-section {
+	// background: linear-gradient(to right, #274685 0%, #3db3c5 100%);
+	color: #fff;
+
+	h2 {
+		color: rgb(0, 0, 0);
+		font-size: 3rem;
+		font-weight: 700;
+
+		@media screen and (max-width: 768px) {
+			font-size: 2rem;
+		}
+	}
+
+	.btn {
+		background: #ffffff;
+		color: #fff;
+
+		i {
+			margin-right: 5px;
+			font-size: 24px;
+			line-height: 0;
+		}
+	}
+}
+
+// These global selectors are intentionally preserved from the deployed CSS.
+form {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	padding-top: 20px;
+}
+
+form button {
+	width: 100px;
+	margin: 0 auto;
+}

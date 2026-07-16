@@ -1,4 +1,4 @@
-@import 'libs/vars';
+@import 'libs/tokens';
 @import 'libs/functions';
 @import 'libs/mixins';
 @import 'libs/vendor';
@@ -64,8 +64,15 @@
 
 	@import 'layout/wrapper';
 	@import 'layout/intro';
+	@import 'layout/sequence-hero';
+	@import 'layout/project-showcase';
+	@import 'layout/podium-sequencer';
 	@import 'layout/header';
 	@import 'layout/nav';
 	@import 'layout/main';
 	@import 'layout/footer';
 	@import 'layout/navPanel';
+
+// Project-specific extensions.
+
+	@import 'components/cta';

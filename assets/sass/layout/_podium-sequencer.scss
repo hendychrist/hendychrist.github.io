@@ -1,0 +1,131 @@
+/* Podium Sequencer — scroll-driven zoom reveal into iPhone mockup video */
+/*
+  Layering: bg (z:2) behind phone (z:10) — bg zooms out revealing room,
+  phone zooms out too but stays centered in foreground.
+*/
+
+.podium-sequencer {
+	--sequencer-black: #050505;
+	--sequencer-ink: #f3f3f0;
+	--phone-border: #1c1c1e;
+	background: var(--sequencer-black);
+	position: relative;
+	overflow: hidden;
+	z-index: 5;
+
+	// Scroll spacer — provides scroll distance for the zoom animation
+	.podium-sequencer__pin {
+		position: relative;
+		width: 100%;
+		height: 400vh;
+	}
+
+	// Sticky viewport — holds scene in view while scrolling
+	.podium-sequencer__scene {
+		position: relative;
+		width: 100%;
+		min-height: 100vh;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	// Podium background — FULLSCREEN, GSAP controls zoom
+	.podium-sequencer__bg {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 100vw;
+		height: 100vh;
+		object-fit: cover;
+		object-position: center;
+		will-change: transform;
+		z-index: 2;
+	}
+
+	// iPhone mockup frame — centered, GSAP scales from big -> small
+	.podium-sequencer__iphone {
+		position: relative;
+		width: clamp(18rem, 22vw, 26rem);
+		aspect-ratio: 9 / 19.5;
+		border-radius: 48px;
+		border: 6px solid var(--phone-border);
+		box-shadow:
+			inset 0 0 0 2px rgba(255, 255, 255, 0.06),
+			0 0 0 8px var(--phone-border),
+			0 0 0 10px rgba(68, 68, 68, 0.4),
+			0 40px 120px rgba(0, 0, 0, 0.8),
+			0 0 80px rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+		transform-origin: center center;
+		will-change: transform, opacity;
+		opacity: 1;
+		z-index: 10; // ON TOP — phone visible above bg — mask effect
+	}
+
+	// Device notch (CSS-only)
+	.podium-sequencer__notch {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: clamp(5.5rem, 10vw, 8rem);
+		height: clamp(1.1rem, 1.6vw, 1.6rem);
+		background: var(--phone-border);
+		border-radius: 0 0 18px 18px;
+		z-index: 7;
+	}
+
+	// Camera dot
+	.podium-sequencer__notch:after {
+		content: '';
+		position: absolute;
+		top: 45%;
+		right: 22%;
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: rgba(40, 40, 45, 0.9);
+		box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.6);
+	}
+
+	// Video inside phone screen
+	.podium-sequencer__video {
+		position: absolute;
+		top: -2px;
+		left: -2px;
+		width: calc(100% + 4px);
+		height: calc(100% + 4px);
+		object-fit: cover;
+		border-radius: 42px;
+	}
+
+	// Reduced motion: show static scene, no zoom/animation
+	@media (prefers-reduced-motion: reduce) {
+		.podium-sequencer__pin {
+			height: auto;
+		}
+
+		.podium-sequencer__scene {
+			position: relative;
+			height: 100vh;
+		}
+
+		.podium-sequencer__bg {
+			transform: translate(-50%, -50%) scale(1);
+			filter: none;
+		}
+
+		.podium-sequencer__iphone {
+			transform: scale(1);
+			opacity: 1;
+			width: clamp(20rem, 30vw, 32rem);
+		}
+	}
+}
+
+// Ensure #main transitions cleanly from sequencer
+.podium-sequencer + [id='main'] {
+	margin-top: 0;
+}
