@@ -17,13 +17,25 @@ const sourceDirectory = path.join(
 	'assets',
 	'parallax-1080-30fps-frame'
 );
-const outputDirectory = path.join(sourceDirectory, 'webp');
 const cwebpBinary = 'cwebp';
 const frameCount = 306;
 const maxParallelConversions = 4;
-const outputWidth = 1920;
-const outputHeight = 1080;
-const outputQuality = 82;
+const outputVariants = [
+	{
+		label: '1080p desktop WebP',
+		directory: 'webp',
+		width: 1920,
+		height: 1080,
+		quality: 82
+	},
+	{
+		label: '540p mobile WebP',
+		directory: 'webp-mobile',
+		width: 960,
+		height: 540,
+		quality: 72
+	}
+];
 
 function relativePath(filePath) {
 	return path.relative(repositoryRoot, filePath).split(path.sep).join('/');
@@ -125,10 +137,11 @@ async function outputIsCurrent(outputPath, sourceStats, scriptStats) {
 	}
 }
 
-async function createJobs(sources) {
+async function createJobs(sources, variant) {
 	const jobs = [];
 	let skipped = 0;
 	const scriptStats = await stat(scriptPath);
+	const outputDirectory = path.join(sourceDirectory, variant.directory);
 
 	await mkdir(outputDirectory, { recursive: true });
 
@@ -143,13 +156,13 @@ async function createJobs(sources) {
 			continue;
 		}
 
-		jobs.push({ ...source, outputPath });
+		jobs.push({ ...source, outputPath, variant });
 	}
 
 	return { jobs, skipped };
 }
 
-async function convertFrame({ sourcePath, outputPath }) {
+async function convertFrame({ sourcePath, outputPath, variant }) {
 	const temporaryOutputPath = `${outputPath}.${process.pid}.tmp`;
 
 	try {
@@ -158,8 +171,8 @@ async function convertFrame({ sourcePath, outputPath }) {
 			[
 				'-quiet',
 				'-mt',
-				'-q', String(outputQuality),
-				'-resize', String(outputWidth), String(outputHeight),
+				'-q', String(variant.quality),
+				'-resize', String(variant.width), String(variant.height),
 				sourcePath,
 				'-o', temporaryOutputPath
 			],
@@ -213,15 +226,17 @@ async function runWorkers(jobs) {
 async function main() {
 	await requireCwebp();
 	const sources = await collectSourceFrames();
-	const { jobs, skipped } = await createJobs(sources);
-	const converted = await runWorkers(jobs);
 
-	console.log(
-		`1080p WebP: converted ${converted}, skipped ${skipped} up-to-date frame(s).`
-	);
-	console.log(
-		`Parallax build complete: ${frameCount} frames at ${outputWidth}x${outputHeight}, quality ${outputQuality}.`
-	);
+	for (const variant of outputVariants) {
+		const { jobs, skipped } = await createJobs(sources, variant);
+		const converted = await runWorkers(jobs);
+
+		console.log(
+			`${variant.label}: converted ${converted}, skipped ${skipped} up-to-date frame(s).`
+		);
+	}
+
+	console.log(`Parallax build complete: ${frameCount} frames across ${outputVariants.length} tiers.`);
 }
 
 main().catch((error) => {

@@ -10,7 +10,7 @@ projects/             # Portfolio project detail pages
 assets/sass/          # Sass source files
 assets/css/           # Generated CSS and vendor styles
 assets/js/            # JavaScript entry point, features, and vendor scripts
-assets/parallax-1080-30fps-frame/ # Local 1080p masters and committed WebP hero sequence
+assets/parallax-1080-30fps-frame/ # Local masters and responsive WebP hero sequences
 images/               # Site images
 scripts/              # Asset generation and repository validation
 ```
@@ -38,16 +38,20 @@ pnpm run build:parallax
 
 The conversion runs at most four `cwebp` processes at once and skips outputs
 whose modification time is newer than both the matching source and conversion
-script. It produces:
+script. It produces two 306-frame tiers:
 
 ```text
 assets/parallax-1080-30fps-frame/webp/frame000.webp ... frame305.webp
 # 1920×1080, quality 82
+assets/parallax-1080-30fps-frame/webp-mobile/frame000.webp ... frame305.webp
+# 960×540, quality 72
 ```
 
-The WebP directory is a production asset and must be committed so GitHub Pages
-can serve the complete sequence. Keep the ignored JPEG masters locally for
-future regeneration. The obsolete `assets/parallax/` directory is also ignored.
+Both WebP directories are production assets and must be committed so GitHub
+Pages can serve the complete desktop and mobile sequences. The hero selects the
+mobile tier for small, low-memory, Save-Data, and slow-network contexts. Keep
+the ignored JPEG masters locally for future regeneration. The obsolete
+`assets/parallax/` directory is also ignored.
 
 ## Production CSS
 
@@ -63,14 +67,15 @@ Edit files in `assets/sass/`. The files `assets/css/main.css` and `assets/css/no
 pnpm run check:links
 ```
 
-This verifies local HTML links and assets, CSS imports and URLs, and the JavaScript module graph. It also detects filename case mismatches that can work locally on macOS but fail on GitHub Pages, and requires all 306 committed WebP frames to exist and be non-empty.
+This verifies local HTML links and assets, CSS imports and URLs, and the JavaScript module graph. It also detects filename case mismatches that can work locally on macOS but fail on GitHub Pages, and requires all 306 frames in both committed WebP tiers to exist and be non-empty.
 
 ## Parallax sequence hero
 
 The home page maps all 306 frames to a three-viewport, scroll-driven hero.
 Frames are loaded around the current scroll target and painted to a responsive
-canvas. The 1080p, 30 fps source keeps decoding and network work practical while
-retaining every frame from the web export.
+canvas. The loader keeps a bounded decoded cache, preserves active requests
+when the scroll target moves, retries transient failures, and selects the
+smaller mobile tier when the device or connection needs it.
 
 GSAP and ScrollTrigger 3.15.0 are version-pinned through jsDelivr. The first
 WebP remains available as a poster when JavaScript, the CDN, or motion effects

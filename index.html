@@ -12,7 +12,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="preload" as="image" href="assets/parallax-1080-30fps-frame/webp/frame000.webp" type="image/webp" fetchpriority="high" />
+		<link rel="preload" as="image" href="assets/parallax-1080-30fps-frame/webp/frame000.webp" type="image/webp" imagesrcset="assets/parallax-1080-30fps-frame/webp-mobile/frame000.webp 960w, assets/parallax-1080-30fps-frame/webp/frame000.webp 1920w" imagesizes="100vw" fetchpriority="high" />
 		<link rel="shortcut icon" type="image/x-icon" href="images/photoProfile.png" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
@@ -24,7 +24,7 @@
 					<!-- Intro -->
 						<div id="intro" class="sequence-hero">
 							<div class="sequence-hero__stage">
-								<img class="sequence-hero__poster" src="assets/parallax-1080-30fps-frame/webp/frame000.webp" alt="" aria-hidden="true" fetchpriority="high" />
+								<img class="sequence-hero__poster" src="assets/parallax-1080-30fps-frame/webp/frame000.webp" srcset="assets/parallax-1080-30fps-frame/webp-mobile/frame000.webp 960w, assets/parallax-1080-30fps-frame/webp/frame000.webp 1920w" sizes="100vw" alt="" aria-hidden="true" fetchpriority="high" />
 								<canvas class="sequence-hero__canvas" aria-hidden="true"></canvas>
 								<div class="sequence-hero__overlay" aria-hidden="true"></div>
 								<div class="sequence-hero__exit" aria-hidden="true"></div>
@@ -36,11 +36,10 @@
 												<span>Hendy</span>
 												<span>Christian</span>
 											</h1>
-											<p class="sequence-hero__lede">I build thoughtful mobile experiences with Flutter, Dart, Swift, and connected services.</p>
+											<p class="sequence-hero__lede">I build thoughtful mobile experiences with Flutter & Dart</p>
 											<ul class="sequence-hero__tech-list" aria-label="Core technologies">
 												<li>Flutter</li>
 												<li>Dart</li>
-												<li>Swift</li>
 												<li>Firebase</li>
 												<li>REST API</li>
 											</ul>
@@ -64,22 +63,22 @@
 												<li>
 													<span>01</span>
 													<div>
-														<strong>Cross-platform development</strong>
-														<small>Flutter &amp; Dart</small>
+														<strong>Flutter apps</strong>
+														<small>BLoC/Cubit · Dependency Injection · Multi-environment builds</small>
 													</div>
 												</li>
 												<li>
 													<span>02</span>
 													<div>
-														<strong>Native iOS development</strong>
-														<small>Swift &amp; UIKit</small>
+														<strong>App architectures</strong>
+														<small>WebView bridges · State management · Modular codebases</small>
 													</div>
 												</li>
 												<li>
 													<span>03</span>
 													<div>
-														<strong>Data and connected services</strong>
-														<small>REST APIs &amp; Firebase</small>
+														<strong>Connected services &amp; backend flows</strong>
+														<small>REST APIs · Firebase · Authentication</small>
 													</div>
 												</li>
 											</ul>
@@ -88,16 +87,9 @@
 
 									<section class="sequence-hero__panel sequence-hero__panel--disciplines" data-hero-panel="disciplines" aria-labelledby="disciplines-title">
 										<div class="sequence-hero__panel-inner">
-											<p class="sequence-hero__eyebrow">Working disciplines</p>
-											<h2 id="disciplines-title">Clear interactions.<br />Dependable integrations.</h2>
-											<p class="sequence-hero__summary">Products designed for everyday use, from the first interface decision to the data behind it.</p>
-											<ul class="sequence-hero__discipline-list" aria-label="Product disciplines">
-												<li>Product UI</li>
-												<li>API Integration</li>
-												<li>Authentication</li>
-												<li>Realtime Data</li>
-											</ul>
-											<p class="sequence-hero__closing">Selected work follows</p>
+											<p class="sequence-hero__eyebrow">Beyond the mobile screen</p>
+											<h2 id="disciplines-title">Supporting the apps people actually use.</h2>
+											<p class="sequence-hero__summary">Beyond Flutter apps, I've helped maintain backend services — Golang APIs, SQL queries, and CMS/CRM workflows.</p>
 										</div>
 									</section>
 								</div>
@@ -119,8 +111,8 @@
 
 								<div class="project-showcase__content project-showcase__content--lead">
 									<header class="project-showcase__intro">
-										<p>Selected work / Production mobile products</p>
-										<h2 id="projects-title">Production Flutter products built for customer self-service, workforce operations, and connected learning.</h2>
+										<p>Selected work</p>
+										<h2 id="projects-title">Products built for customer self-service, workforce operations, and operational workflows.</h2>
 									</header>
 
 									<div id="projects-grid" class="project-showcase__flagship">
@@ -153,10 +145,10 @@
 							<!-- Podium Sequencer — scroll-driven zoom to iPhone mockup -->
 				<section id="podium-sequencer" class="podium-sequencer" aria-label="Showcase sequence">
 					<div class="podium-sequencer__scene">
-						<img class="podium-sequencer__bg" src="images/showcase-podium-large.jpg" alt="" aria-hidden="true" />
+						<img class="podium-sequencer__bg" src="images/showcase-podium-large.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
 						<div class="podium-sequencer__iphone">
 							<div class="podium-sequencer__notch"></div>
-							<video class="podium-sequencer__video" muted playsinline preload="auto" src="assets/video/dicbn-mobile-app.mp4"></video>
+							<video class="podium-sequencer__video" src="assets/video/dicbn-mobile-app.mp4" muted playsinline autoplay loop preload="auto" aria-hidden="true"></video>
 						</div>
 					</div>
 				</section>
@@ -209,6 +201,98 @@
 									</article>
 								</div>
 							</div>
+
+							<!-- Team Contributions -->
+							<section id="contributions" class="contributions-section" aria-labelledby="contributions-title">
+								<div class="contributions-section__lead">
+									<header class="contributions-section__header">
+										<p>Collaboration</p>
+										<h2 id="contributions-title">Team Contributions</h2>
+									</header>
+
+									<div class="contributions-section__grid">
+
+										<article class="contrib-card" data-project-card>
+											<div class="contrib-card__visual contrib-card__visual--website" aria-hidden="true">
+												<div class="contrib-mockup-bar">
+													<span class="contrib-dot"></span>
+													<span class="contrib-dot"></span>
+													<span class="contrib-dot"></span>
+												</div>
+												<div class="contrib-mockup-body">
+													<code>next.js 14</code>
+													<span class="contrib-op">·</span>
+													<code>react 18</code>
+													<span class="contrib-op">·</span>
+													<code>typescript</code>
+													<span class="contrib-op">·</span>
+													<code>tailwind</code>
+												</div>
+												<div class="contrib-mockup-body">
+													<code>shadcn/ui</code>
+													<span class="contrib-op">·</span>
+													<code>framer-motion</code>
+													<span class="contrib-op">·</span>
+													<code>next-intl</code>
+													<span class="contrib-op">·</span>
+													<code>sentry</code>
+												</div>
+											</div>
+											<div class="contrib-card__info">
+												<p class="contrib-card__label">Production Website</p>
+												<h3>CBN Corporate Website</h3>
+												<p>Customer-facing corporate website for CBN ISP/telecom &mdash; server-side rendered dynamic zones driven by CMS, with bilingual i18n, nonce-based CSP middleware, domain-driven API integration across CMS/CRM/payment gateways, and a GitLab CI/CD pipeline with Docker, Nomad, and Sentry.</p>
+												<ul class="contrib-card__tags" aria-label="Tech stack">
+													<li>Next.js 14</li>
+													<li>TypeScript</li>
+													<li>Tailwind</li>
+													<li>Sentry</li>
+												</ul>
+											</div>
+										</article>
+
+										<article class="contrib-card" data-project-card>
+											<div class="contrib-card__visual contrib-card__visual--cms" aria-hidden="true">
+												<div class="contrib-mockup-bar">
+													<span class="contrib-dot"></span>
+													<span class="contrib-dot"></span>
+													<span class="contrib-dot"></span>
+												</div>
+												<div class="contrib-mockup-body">
+													<code>strapi v4</code>
+													<span class="contrib-op">·</span>
+													<code>postgresql</code>
+													<span class="contrib-op">·</span>
+													<code>minio s3</code>
+													<span class="contrib-op">·</span>
+													<code>ckeditor 5</code>
+												</div>
+												<div class="contrib-mockup-body">
+													<code>74 content types</code>
+													<span class="contrib-op">·</span>
+													<code>i18n</code>
+													<span class="contrib-op">·</span>
+													<code>docker</code>
+													<span class="contrib-op">·</span>
+													<code>gitlab ci</code>
+												</div>
+											</div>
+											<div class="contrib-card__info">
+												<p class="contrib-card__label">Headless CMS Platform</p>
+												<h3>CBN CMS Platform</h3>
+												<p>Enterprise headless CMS powering CBN's editorial pipeline &mdash; 74+ content types, Strapi v4 with PostgreSQL and MinIO-backed S3 storage, CKEditor 5 content authoring, multi-language authoring, and multi-environment deployment (dev/staging/live) with GitLab CI.</p>
+												<ul class="contrib-card__tags" aria-label="Tech stack">
+													<li>Strapi</li>
+													<li>PostgreSQL</li>
+													<li>AWS S3</li>
+													<li>GitLab CI</li>
+												</ul>
+											</div>
+										</article>
+
+									</div>
+								</div>
+							</section>
 
 							<div id="copyright">
 								<ul><li>&copy; Hendy Christian</li></ul>

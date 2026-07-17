@@ -97,5 +97,43 @@ export function initProjectShowcase({ gsap, ScrollTrigger }) {
 		}
 	});
 
+	const contribCards = document.querySelectorAll('#contributions [data-project-card]');
+
+	contribCards.forEach((card) => {
+		gsap.fromTo(card, {
+			autoAlpha: 0,
+			y: 48
+		}, {
+			autoAlpha: 1,
+			y: 0,
+			duration: 0.85,
+			ease: 'power3.out',
+			clearProps: 'opacity,visibility,transform',
+			scrollTrigger: {
+				trigger: card,
+				start: 'top 88%',
+				once: true
+			}
+		});
+
+		const visual = card.querySelector('.contrib-card__visual');
+
+		if (visual) {
+			gsap.fromTo(visual, {
+				scale: 1.025
+			}, {
+				scale: 1,
+				duration: 1,
+				ease: 'power3.out',
+				clearProps: 'transform',
+				scrollTrigger: {
+					trigger: card,
+					start: 'top 88%',
+					once: true
+				}
+			});
+		}
+	});
+
 	return true;
 }

@@ -1,21 +1,33 @@
 const FRAME_COUNT = 306;
 const LAST_FRAME = FRAME_COUNT - 1;
-const FRAME_ROOT = 'assets/parallax-1080-30fps-frame/webp';
-const SOURCE_WIDTH = 1920;
-const SOURCE_HEIGHT = 1080;
+const DESKTOP_FRAME_ROOT = 'assets/parallax-1080-30fps-frame/webp';
+const MOBILE_FRAME_ROOT = 'assets/parallax-1080-30fps-frame/webp-mobile';
+const DESKTOP_SOURCE = {
+	name: '1080p-30fps',
+	root: DESKTOP_FRAME_ROOT
+};
+const MOBILE_SOURCE = {
+	name: '540p-30fps',
+	root: MOBILE_FRAME_ROOT
+};
 
 // Decoded 1080p frames are roughly 8 MB each. Keep this deliberately small so
 // scrolling the sequence does not create hundreds of megabytes of live bitmap
 // data. The browser's HTTP cache can still make reverse scrolling inexpensive.
 const MAX_CACHED_FRAMES = 10;
 const MAX_CONCURRENT_LOADS = 4;
-const LOOK_AHEAD = 5;
-const LOOK_BEHIND = 2;
+const MAX_PREFETCH_LOADS = MAX_CONCURRENT_LOADS - 1;
+const LOOK_AHEAD = 12;
+const LOOK_BEHIND = 4;
+const MAX_FALLBACK_DISTANCE = 12;
+const MAX_RETRIES = 3;
+const RETRY_DELAYS = [250, 750, 1500];
+const LOAD_TIMEOUT = 10000;
 const MAX_CANVAS_PIXEL_RATIO = 1.25;
 const EXIT_FADE_START = 2 / 3;
 
-function frameUrl(index) {
-	return `${FRAME_ROOT}/frame${String(index).padStart(3, '0')}.webp`;
+function frameUrl(root, index) {
+	return `${root}/frame${String(index).padStart(3, '0')}.webp`;
 }
 
 function clampFrame(index) {
@@ -35,6 +47,22 @@ function releaseDrawable(drawable) {
 		drawable.close();
 }
 
+function selectFrameSource() {
+	const connection = navigator.connection
+		|| navigator.mozConnection
+		|| navigator.webkitConnection;
+	const effectiveType = connection?.effectiveType || '';
+	const deviceMemory = Number(navigator.deviceMemory);
+	const useMobileSource = window.matchMedia?.('(max-width: 980px)').matches
+		|| connection?.saveData === true
+		|| effectiveType === 'slow-2g'
+		|| effectiveType === '2g'
+		|| effectiveType === '3g'
+		|| (Number.isFinite(deviceMemory) && deviceMemory <= 4);
+
+	return useMobileSource ? MOBILE_SOURCE : DESKTOP_SOURCE;
+}
+
 /**
  * Initializes the scroll-driven home-page frame sequence.
  *
@@ -46,6 +74,8 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 
 	if (!hero || !gsap || !ScrollTrigger || reduceMotion)
 		return false;
+
+	const frameSource = selectFrameSource();
 
 	const stage = hero.querySelector('.sequence-hero__stage');
 	const canvas = hero.querySelector('.sequence-hero__canvas');
@@ -76,6 +106,9 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 	const cache = new Map();
 	const pending = new Map();
 	const failed = new Set();
+	const retryAttempts = new Map();
+	const retryTimers = new Map();
+	const retryReady = new Set();
 	let queue = [];
 	let queued = new Set();
 	let activeLoads = 0;
@@ -88,7 +121,7 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 
 	gsap.registerPlugin(ScrollTrigger);
 	document.documentElement.classList.add('hero-sequence-active');
-	hero.dataset.sequenceTier = '1080-30fps';
+	hero.dataset.sequenceTier = frameSource.name;
 	gsap.set(panels, {
 		autoAlpha: 0,
 		y: 28
@@ -154,7 +187,15 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 
 	function drawRequestedFrame() {
 		renderFrameRequest = 0;
-		const index = nearestCachedFrame(requestedFrame);
+		let index = nearestCachedFrame(requestedFrame);
+
+		if (
+			index >= 0
+			&& renderedFrame >= 0
+			&& index !== requestedFrame
+			&& Math.abs(index - requestedFrame) > MAX_FALLBACK_DISTANCE
+		)
+			index = renderedFrame;
 
 		if (index < 0 || (index === renderedFrame && !redrawRequired))
 			return;
@@ -198,9 +239,7 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 		const desiredPixelRatio = Math.max(window.devicePixelRatio || 1, 1);
 		const pixelRatio = Math.max(0.25, Math.min(
 			desiredPixelRatio,
-			MAX_CANVAS_PIXEL_RATIO,
-			SOURCE_WIDTH / width,
-			SOURCE_HEIGHT / height
+			MAX_CANVAS_PIXEL_RATIO
 		));
 		const canvasWidth = Math.max(1, Math.round(width * pixelRatio));
 		const canvasHeight = Math.max(1, Math.round(height * pixelRatio));
@@ -216,21 +255,62 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 		scheduleRender();
 	}
 
+	function clearLoadTimeout(record) {
+		if (record.timeoutId) {
+			window.clearTimeout(record.timeoutId);
+			record.timeoutId = 0;
+		}
+	}
+
+	function scheduleRetry(index) {
+		const attempt = (retryAttempts.get(index) || 0) + 1;
+		retryAttempts.set(index, attempt);
+
+		if (attempt > MAX_RETRIES) {
+			retryReady.delete(index);
+			failed.add(index);
+			return;
+		}
+
+		if (retryTimers.has(index))
+			return;
+
+		const delay = RETRY_DELAYS[attempt - 1] || RETRY_DELAYS.at(-1);
+		const timer = window.setTimeout(() => {
+			retryTimers.delete(index);
+			failed.delete(index);
+			retryReady.add(index);
+
+			if (cache.has(index) || pending.has(index) || queued.has(index))
+				return;
+
+			queued.add(index);
+			queue.unshift(index);
+			pumpQueue();
+		}, delay);
+		retryTimers.set(index, timer);
+	}
+
 	function completeLoad(index, record, drawable, outcome) {
 		if (pending.get(index) !== record) {
 			releaseDrawable(drawable);
 			return;
 		}
 
+		clearLoadTimeout(record);
 		pending.delete(index);
 		activeLoads -= 1;
 
 		if (outcome === 'success') {
+			retryAttempts.delete(index);
+			retryReady.delete(index);
+			failed.delete(index);
 			cache.set(index, drawable);
 			evictDistantFrames();
 			scheduleRender();
 		} else if (outcome === 'failed') {
-			failed.add(index);
+			scheduleRetry(index);
+			scheduleRender();
 		}
 
 		pumpQueue();
@@ -242,8 +322,17 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 
 		const image = new Image();
 		record.image = image;
+		record.controller = null;
+		record.timedOut = false;
 		image.decoding = 'async';
 		image.fetchPriority = index === requestedFrame ? 'high' : 'auto';
+		record.timeoutId = window.setTimeout(() => {
+			record.timedOut = true;
+			image.onload = null;
+			image.onerror = null;
+			image.src = '';
+			completeLoad(index, record, null, 'failed');
+		}, LOAD_TIMEOUT);
 
 		image.onload = () => {
 			const finish = () => completeLoad(index, record, image, 'success');
@@ -255,14 +344,16 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 			image.decode().catch(() => undefined).then(finish);
 		};
 		image.onerror = () => completeLoad(index, record, null, 'failed');
-		image.src = frameUrl(index);
+		image.src = frameUrl(frameSource.root, index);
 	}
 
 	function startLoad(index) {
 		activeLoads += 1;
 		const record = {
 			controller: null,
-			image: null
+			image: null,
+			timeoutId: 0,
+			timedOut: false
 		};
 		pending.set(index, record);
 
@@ -276,51 +367,59 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 		}
 
 		record.controller = new AbortController();
-		fetch(frameUrl(index), {
+		record.timeoutId = window.setTimeout(() => {
+			record.timedOut = true;
+			record.controller?.abort();
+		}, LOAD_TIMEOUT);
+		fetch(frameUrl(frameSource.root, index), {
 			cache: 'force-cache',
 			signal: record.controller.signal
 		})
 			.then((response) => {
-				if (!response.ok)
-					throw new Error(`Frame request failed with ${response.status}`);
+				if (!response.ok) {
+					const error = new Error(`Frame request failed with ${response.status}`);
+					error.isFrameResponseError = true;
+					throw error;
+				}
 
 				return response.blob();
 			})
-			.then((blob) => window.createImageBitmap(blob))
+			.then((blob) => window.createImageBitmap(blob).catch((error) => {
+				error.isBitmapError = true;
+				throw error;
+			}))
 			.then((bitmap) => completeLoad(index, record, bitmap, 'success'))
 			.catch((error) => {
 				if (pending.get(index) !== record)
 					return;
 
 				if (error?.name === 'AbortError') {
-					completeLoad(index, record, null, 'aborted');
+					completeLoad(index, record, null, record.timedOut ? 'failed' : 'aborted');
 					return;
 				}
 
-				// Safari versions with partial ImageBitmap support can reject valid
-				// WebP blobs. Fall back to the regular image decoder in that case.
-				loadWithImage(index, record);
+				if (error?.isBitmapError) {
+					// Safari versions with partial ImageBitmap support can reject valid
+					// WebP blobs. Fall back to the regular image decoder in that case.
+					clearLoadTimeout(record);
+					loadWithImage(index, record);
+					return;
+				}
+
+				completeLoad(index, record, null, 'failed');
 			});
 	}
 
-	function abortLoad(index) {
-		const record = pending.get(index);
-		if (!record)
-			return;
-
-		pending.delete(index);
-		activeLoads -= 1;
-		record.controller?.abort();
-		if (record.image) {
-			record.image.onload = null;
-			record.image.onerror = null;
-			record.image.src = '';
-		}
-	}
-
 	function pumpQueue() {
-		while (activeLoads < MAX_CONCURRENT_LOADS && queue.length > 0) {
-			const index = queue.shift();
+		while (queue.length > 0) {
+			const index = queue[0];
+			const isTarget = index === requestedFrame;
+			const loadLimit = isTarget ? MAX_CONCURRENT_LOADS : MAX_PREFETCH_LOADS;
+
+			if (activeLoads >= loadLimit)
+				break;
+
+			queue.shift();
 			queued.delete(index);
 
 			if (cache.has(index) || pending.has(index) || failed.has(index))
@@ -339,38 +438,6 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 		for (let distance = 1; distance <= LOOK_BEHIND; distance += 1)
 			orderedFrames.push(target - (scrollDirection * distance));
 
-		const wanted = new Set();
-		for (const rawIndex of orderedFrames) {
-			if (rawIndex >= 0 && rawIndex <= LAST_FRAME)
-				wanted.add(rawIndex);
-		}
-
-		// Requests outside the current directional window cannot help the next
-		// paint. Cancel them so a quick scrub or direction change is responsive.
-		for (const index of pending.keys()) {
-			if (!wanted.has(index))
-				abortLoad(index);
-		}
-
-		// If all slots still contain nearby prefetches, make room for the exact
-		// target instead of letting it wait behind speculative work.
-		if (!cache.has(target)
-			&& !pending.has(target)
-			&& activeLoads >= MAX_CONCURRENT_LOADS) {
-			let farthestIndex = -1;
-			let farthestDistance = -1;
-			for (const index of pending.keys()) {
-				const distance = Math.abs(index - target);
-				if (distance > farthestDistance) {
-					farthestIndex = index;
-					farthestDistance = distance;
-				}
-			}
-
-			if (farthestIndex >= 0)
-				abortLoad(farthestIndex);
-		}
-
 		queue = [];
 		queued = new Set();
 		for (const index of orderedFrames) {
@@ -378,6 +445,14 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 				continue;
 
 			if (queued.has(index) || cache.has(index) || pending.has(index) || failed.has(index))
+				continue;
+
+			queued.add(index);
+			queue.push(index);
+		}
+
+		for (const index of retryReady) {
+			if (cache.has(index) || pending.has(index) || failed.has(index) || queued.has(index))
 				continue;
 
 			queued.add(index);
@@ -408,7 +483,7 @@ export function initHeroSequence({ gsap, ScrollTrigger }) {
 			start: 'top top',
 			end: '+=300%',
 			pin: stage,
-			scrub: 0.8,
+			scrub: 0.15,
 			invalidateOnRefresh: true,
 			onUpdate(self) {
 				if (!exitVeil)

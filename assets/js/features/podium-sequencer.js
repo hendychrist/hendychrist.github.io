@@ -6,7 +6,7 @@
  *   - phone starts zoomed in too (scale 3) — big, filling viewport center
  *   - scroll zooms bg OUT (20→1) AND phone OUT (3→1) together
  *   - phone stays perfectly centered during the zoom-out
- *   - video auto-plays from start, synced to scroll
+ *   - video plays immediately on load, loops continuously
  */
 
 export function initPodiumSequencer({ gsap, ScrollTrigger }) {
@@ -45,14 +45,6 @@ export function initPodiumSequencer({ gsap, ScrollTrigger }) {
 		transformOrigin: 'center center',
 	});
 
-	// ─── Video duration ───
-	let videoDuration = 0;
-	if (video) {
-		video.addEventListener('loadedmetadata', () => {
-			videoDuration = video.duration || 0;
-		}, { once: true });
-	}
-
 	// ─── Timeline ───
 	// GSAP pins the scene — scroll drives bg zoom + phone zoom together
 	const zoomTL = gsap.timeline({
@@ -80,20 +72,10 @@ export function initPodiumSequencer({ gsap, ScrollTrigger }) {
 		duration: 1,
 	}, 0);
 
-	// 3) Video: play + seek synced to scroll
-	if (video) {
-		zoomTL.call(() => {
-			video.currentTime = 0;
+	// Video: plays immediately, no scroll sync
+		if (video) {
 			video.play().catch(() => {});
-		}, [], 0.05);
-
-		if (videoDuration > 0) {
-			zoomTL.to(video, {
-				currentTime: videoDuration,
-				ease: 'none',
-			}, 0.1);
 		}
-	}
 
 	// ─── Resize ───
 	let raf = 0;

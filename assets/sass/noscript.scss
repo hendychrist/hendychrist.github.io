@@ -66,3 +66,16 @@
 			display: none;
 		}
 	}
+
+/* Contributions — no-JS fallback */
+
+	.contributions-section {
+		.contrib-card {
+			grid-template-columns: minmax(0, 1fr) !important;
+			direction: ltr;
+		}
+
+		.contrib-card:nth-child(even) {
+			direction: ltr !important;
+		}
+	}

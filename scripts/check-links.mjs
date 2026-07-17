@@ -14,12 +14,24 @@ const counts = {
 	moduleFiles: 0,
 	references: 0
 };
-const parallaxFrameRoot = path.join(
-	repositoryRoot,
-	'assets',
-	'parallax-1080-30fps-frame',
-	'webp'
-);
+const parallaxFrameRoots = [
+	{
+		label: '1080p desktop',
+		directory: 'webp'
+	},
+	{
+		label: '540p mobile',
+		directory: 'webp-mobile'
+	}
+].map(({ label, directory }) => ({
+	label,
+	root: path.join(
+		repositoryRoot,
+		'assets',
+		'parallax-1080-30fps-frame',
+		directory
+	)
+}));
 const parallaxFrameCount = 306;
 
 function displayPath(filePath) {
@@ -239,32 +251,34 @@ async function checkModuleGraph() {
 }
 
 async function checkParallaxFrames() {
-	for (let frame = 0; frame < parallaxFrameCount; frame += 1) {
-		const filename = `frame${String(frame).padStart(3, '0')}.webp`;
-		const framePath = path.join(parallaxFrameRoot, filename);
-		const result = await inspectExactPath(framePath);
+	for (const frameRoot of parallaxFrameRoots) {
+		for (let frame = 0; frame < parallaxFrameCount; frame += 1) {
+			const filename = `frame${String(frame).padStart(3, '0')}.webp`;
+			const framePath = path.join(frameRoot.root, filename);
+			const result = await inspectExactPath(framePath);
 
-		if (!result.ok) {
-			errors.push({
-				source: '1080p 30 fps parallax frame sequence',
-				reference: filename,
-				resolved: displayPath(framePath),
-				type: 'Parallax frame',
-				reason: result.reason
-			});
-			continue;
-		}
+			if (!result.ok) {
+				errors.push({
+					source: `${frameRoot.label} parallax frame sequence`,
+					reference: filename,
+					resolved: displayPath(framePath),
+					type: 'Parallax frame',
+					reason: result.reason
+				});
+				continue;
+			}
 
-		const frameStats = await stat(result.resolvedPath);
+			const frameStats = await stat(result.resolvedPath);
 
-		if (frameStats.size === 0) {
-			errors.push({
-				source: '1080p 30 fps parallax frame sequence',
-				reference: filename,
-				resolved: displayPath(framePath),
-				type: 'Parallax frame',
-				reason: 'file is empty'
-			});
+			if (frameStats.size === 0) {
+				errors.push({
+					source: `${frameRoot.label} parallax frame sequence`,
+					reference: filename,
+					resolved: displayPath(framePath),
+					type: 'Parallax frame',
+					reason: 'file is empty'
+				});
+			}
 		}
 	}
 }
@@ -291,7 +305,7 @@ if (errors.length > 0) {
 	console.log(
 		`Link check passed: ${counts.references} local references across `
 		+ `${counts.htmlFiles} HTML files, ${counts.cssFiles} CSS files, and `
-		+ `${counts.moduleFiles} ES modules; all ${parallaxFrameCount} parallax frames `
-		+ `are present and non-empty in the committed WebP sequence.`
+		+ `${counts.moduleFiles} ES modules; all ${parallaxFrameCount} frames in `
+		+ `${parallaxFrameRoots.length} WebP sequences are present and non-empty.`
 	);
 }
